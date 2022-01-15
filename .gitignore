@@ -18,6 +18,7 @@ images/
 opencv/
 convnet/
 decaf/
+out/
 submission/
 cfg/
 temp/

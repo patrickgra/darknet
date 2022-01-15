@@ -119,7 +119,7 @@ param (
   [string]$AdditionalBuildSetup = ""  # "-DCMAKE_CUDA_ARCHITECTURES=30"
 )
 
-$build_ps1_version = "0.9.8"
+$build_ps1_version = "0.9.7"
 
 $ErrorActionPreference = "SilentlyContinue"
 Stop-Transcript | out-null
@@ -288,13 +288,7 @@ if (($IsLinux -or $IsMacOS) -and ($ForceGCCVersion -gt 0)) {
 }
 
 if (($IsWindows -or $IsWindowsPowerShell) -and (-Not $env:VCPKG_DEFAULT_TRIPLET)) {
-  $env:VCPKG_DEFAULT_TRIPLET = "x64-windows-release"
-}
-elseif ($IsMacOS -and (-Not $env:VCPKG_DEFAULT_TRIPLET)) {
-  $env:VCPKG_DEFAULT_TRIPLET = "x64-osx-release"
-}
-elseif ($IsLinux -and (-Not $env:VCPKG_DEFAULT_TRIPLET)) {
-  $env:VCPKG_DEFAULT_TRIPLET = "x64-linux-release"
+  $env:VCPKG_DEFAULT_TRIPLET = "x64-windows"
 }
 
 if ($EnableCUDA) {
@@ -682,10 +676,6 @@ if (-Not $DoNotSetupVS) {
     }
     elseif ($tokens[0] -eq "16") {
       $generator = "Visual Studio 16 2019"
-      $AdditionalBuildSetup = $AdditionalBuildSetup + " -T `"host=x64`" -A `"x64`""
-    }
-    elseif ($tokens[0] -eq "17") {
-      $generator = "Visual Studio 17 2022"
       $AdditionalBuildSetup = $AdditionalBuildSetup + " -T `"host=x64`" -A `"x64`""
     }
     else {
