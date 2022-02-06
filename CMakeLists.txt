@@ -361,6 +361,9 @@ file(GLOB headers "${CMAKE_CURRENT_LIST_DIR}/src/*.h")
 list(APPEND headers
   ${CMAKE_CURRENT_LIST_DIR}/include/darknet.h
 )
+list(APPEND headers
+  ${CMAKE_CURRENT_LIST_DIR}/include/dirent.h
+)
 #remove windows only files
 if(NOT MSVC)
   list(REMOVE_ITEM headers
@@ -397,7 +400,7 @@ if(BUILD_AS_CPP)
   set_source_files_properties(${sources} PROPERTIES LANGUAGE CXX)
 endif()
 
-add_library(dark ${CMAKE_CURRENT_LIST_DIR}/include/yolo_v2_class.hpp ${CMAKE_CURRENT_LIST_DIR}/src/yolo_v2_class.cpp ${sources} ${headers} ${cuda_sources})
+add_library(dark ${CMAKE_CURRENT_LIST_DIR}/include/yolo_v2_class.hpp ${CMAKE_CURRENT_LIST_DIR}/src/yolo_v2_class.cpp ${sources} ${headers} ${cuda_sources} "include/dirent.h")
 set_target_properties(dark PROPERTIES POSITION_INDEPENDENT_CODE ON)
 if(ENABLE_CUDA)
   set_target_properties(dark PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
@@ -414,12 +417,12 @@ if(OpenCV_FOUND AND OpenCV_VERSION VERSION_GREATER "3.0" AND BUILD_USELIB_TRACK)
   add_executable(uselib_track ${CMAKE_CURRENT_LIST_DIR}/src/yolo_console_dll.cpp)
 endif()
 
-add_executable(uselib ${CMAKE_CURRENT_LIST_DIR}/src/yolo_console_dll.cpp)
+add_executable(uselib ${CMAKE_CURRENT_LIST_DIR}/src/yolo_console_dll.cpp "include/dirent.h")
 if(BUILD_AS_CPP)
   set_target_properties(uselib PROPERTIES LINKER_LANGUAGE CXX)
 endif()
 
-add_executable(darknet ${CMAKE_CURRENT_LIST_DIR}/src/darknet.c ${sources} ${headers} ${cuda_sources})
+add_executable(darknet ${CMAKE_CURRENT_LIST_DIR}/src/darknet.c ${sources} ${headers} ${cuda_sources} "include/dirent.h")
 if(BUILD_AS_CPP)
   set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/src/darknet.c PROPERTIES LANGUAGE CXX)
   set_target_properties(darknet PROPERTIES LINKER_LANGUAGE CXX)
